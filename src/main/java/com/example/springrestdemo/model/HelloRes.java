@@ -1,4 +1,4 @@
-package com.example.springrestdemo.model.response;
+package com.example.springrestdemo.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginRes {
-    private String email;
-    private String token;
-
+public class HelloRes {
+    private String message;
+    private String time;
 }

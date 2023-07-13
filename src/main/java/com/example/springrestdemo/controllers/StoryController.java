@@ -11,10 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -69,6 +66,43 @@ public class StoryController {
             Story newStory = storyService.createStory(story);
 
             return ResponseEntity.ok(newStory);
+
+        } catch (Exception e){
+            ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST, e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        }
+
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/get-by-id/{id}",method = RequestMethod.GET)
+    public ResponseEntity getStoryById(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") Long id){
+
+        try {
+            Story story = storyService.getStoryById(id);
+            if(story == null){
+                ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST, "No story is found");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
+
+            return ResponseEntity.ok(story);
+
+        } catch (Exception e){
+            ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST, e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        }
+
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/get-by-user-id/{userId}",method = RequestMethod.GET)
+    public ResponseEntity getAllStoriesByUserId(HttpServletRequest request, HttpServletResponse response, @PathVariable("userId") Long userId){
+
+        try {
+            List<Story> storyList = storyService.getAllStoriesByUser(userId);
+
+
+            return ResponseEntity.ok(storyList);
 
         } catch (Exception e){
             ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST, e.getMessage());
